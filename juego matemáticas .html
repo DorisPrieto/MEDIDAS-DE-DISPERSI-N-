@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Medidas de Dispersión</title>
+</head>
+<body>
+
+<script>
+  import random
+import statistics
+
+# Función para calcular la desviación estándar
+def calcular_desviacion_estandar(datos):
+    return round(statistics.stdev(datos), 2)
+
+# Función para calcular el rango intercuartílico
+def calcular_rango_intercuartilico(datos):
+    quartiles = statistics.quantiles(datos, n=4)
+    return round(quartiles[2] - quartiles[0], 2)
+
+# Función para generar preguntas aleatorias
+def generar_pregunta():
+    # Generar datos aleatorios para la pregunta
+    datos_pregunta = [random.randint(1, 10) for _ in range(5)]
+
+    # Seleccionar aleatoriamente la medida de dispersión para la pregunta
+    medidas_dispersión = [calcular_desviacion_estandar, calcular_rango_intercuartilico]
+    medida_seleccionada = random.choice(medidas_dispersión)
+
+    # Calcular la medida de dispersión y la respuesta correcta
+    respuesta_correcta = medida_seleccionada(datos_pregunta)
+
+    # Crear enunciado de la pregunta
+    enunciado_pregunta = f"Calcula la {medida_seleccionada.__name__} de: {datos_pregunta}"
+
+    return {'enunciado': enunciado_pregunta, 'respuesta': respuesta_correcta}
+
+# Iniciar juego
+puntuacion = 0
+
+while True:
+    # Generar pregunta
+    pregunta = generar_pregunta()
+
+    # Mostrar pregunta al usuario y obtener respuesta
+    respuesta_usuario = input(f"Pregunta: {pregunta['enunciado']} ")
+
+    # Verificar respuesta
+    if float(respuesta_usuario) == pregunta['respuesta']:
+        puntuacion += 1
+        print("¡Correcto!")
+    else:
+        print("Incorrecto. La respuesta correcta es:", pregunta['respuesta'])
+
+    # Mostrar puntuación actual
+    print("Puntuación:", puntuacion)
+
+    # Preguntar al usuario si quiere seguir jugando
+    jugar_nuevamente = input("¿Quieres jugar de nuevo? (s/n): ")
+    if jugar_nuevamente.lower() != 's':
+        print("Gracias por jugar. Tu puntuación final es:", puntuacion)
+        break
+</script>
+
+</body>
+</html>
+
